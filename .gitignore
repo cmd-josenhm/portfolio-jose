@@ -1,4 +1,34 @@
-# Logs
+# =========================================================
+# SÉCURITÉ & SECRETS (CRUCIAL — SUPABASE & API KEYS)
+# =========================================================
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =========================================================
+# DÉPENDANCES
+# =========================================================
+node_modules/
+jspm_packages/
+
+# =========================================================
+# FICHIERS DE BUILD & PRODUCTION
+# =========================================================
+dist/
+dist-ssr/
+build/
+.next/
+out/
+.vercel
+.netlify
+
+# =========================================================
+# LOGS & TEMPORAIRES
+# =========================================================
 logs
 *.log
 npm-debug.log*
@@ -6,17 +36,17 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+*.tmp
+*.temp
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# =========================================================
+# FICHIERS SYSTÈMES & ÉDITEURS
+# =========================================================
+.DS_Store
+Thumbs.db
+.idea/
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj

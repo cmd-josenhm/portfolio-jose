@@ -1,811 +1,138 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-/* =========================================================
-   LIENS
-   ========================================================= */
-
-const links = [
+const NAV_LINKS = [
   {
-    id: "home",
+    path: "/",
     label: "Accueil",
-    icon: "home",
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+    ),
   },
   {
-    id: "projects",
+    path: "/projets",
     label: "Projets",
-    icon: "projects",
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+      </svg>
+    ),
   },
   {
-    id: "about",
+    path: "/a-propos",
     label: "À propos",
-    icon: "about",
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+    ),
   },
   {
-    id: "contact",
+    path: "/blog",
+    label: "Blog",
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-2-2h-2" />
+      </svg>
+    ),
+  },
+  {
+    path: "/contact",
     label: "Contact",
-    icon: "contact",
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z" />
+      </svg>
+    ),
   },
 ];
 
-/* =========================================================
-   ICÔNES SVG
-   ========================================================= */
-
-function Icon({ type, size = 18 }) {
-  const common = {
-    width: size,
-    height: size,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.8,
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    "aria-hidden": "true",
-  };
-
-  if (type === "home") {
-    return (
-      <svg {...common}>
-        <path d="M3 10.5 12 3l9 7.5" />
-        <path d="M5.5 9.5V21h13V9.5" />
-        <path d="M9.5 21v-6h5v6" />
-      </svg>
-    );
-  }
-
-  if (type === "projects") {
-    return (
-      <svg {...common}>
-        <rect x="3.5" y="4" width="17" height="16" rx="2.5" />
-        <path d="M7 8h10" />
-        <path d="M7 12h4" />
-        <path d="M7 16h7" />
-      </svg>
-    );
-  }
-
-  if (type === "about") {
-    return (
-      <svg {...common}>
-        <circle cx="12" cy="8" r="3.2" />
-        <path d="M5.5 20c.8-4 3-6 6.5-6s5.7 2 6.5 6" />
-      </svg>
-    );
-  }
-
-  if (type === "contact") {
-    return (
-      <svg {...common}>
-        <rect
-          x="3.5"
-          y="5"
-          width="17"
-          height="14"
-          rx="2.5"
-        />
-        <path d="m5 7 7 5 7-5" />
-      </svg>
-    );
-  }
-
-  return null;
-}
-
-/* =========================================================
-   ICÔNES THÈME
-   ========================================================= */
-
-function ThemeIcon({ darkMode }) {
-  if (darkMode) {
-    return (
-      <svg
-        width="17"
-        height="17"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <circle cx="12" cy="12" r="4" />
-        <path d="M12 2v2" />
-        <path d="M12 20v2" />
-        <path d="m4.93 4.93 1.42 1.42" />
-        <path d="m17.65 17.65 1.42 1.42" />
-        <path d="M2 12h2" />
-        <path d="M20 12h2" />
-        <path d="m4.93 19.07 1.42-1.42" />
-        <path d="m17.65 6.35 1.42-1.42" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg
-      width="17"
-      height="17"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z" />
-    </svg>
-  );
-}
-
-/* =========================================================
-   NAVBAR
-   ========================================================= */
-
-function Navbar({ darkMode, setDarkMode }) {
-  const [activeSection, setActiveSection] = useState("home");
+export default function Navbar({ darkMode, setDarkMode }) {
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] =
-    useState(false);
-
-  const navRef = useRef(null);
-  const indicatorRef = useRef(null);
-  const previousScrollY = useRef(0);
-  const observerRef = useRef(null);
-
-  /* ======================================================
-     ACTIVE SECTION
-     ====================================================== */
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const sections = links
-      .map((link) =>
-        document.getElementById(link.id)
-      )
-      .filter(Boolean);
-
-    if (!sections.length) return;
-
-    observerRef.current?.disconnect();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (a, b) =>
-              b.intersectionRatio -
-              a.intersectionRatio
-          );
-
-        if (visibleEntries.length > 0) {
-          setActiveSection(
-            visibleEntries[0].target.id
-          );
-        }
-      },
-      {
-        root: null,
-        threshold: [0.2, 0.35, 0.5, 0.7],
-        rootMargin:
-          "-15% 0px -55% 0px",
-      }
-    );
-
-    sections.forEach((section) => {
-      observer.observe(section);
-    });
-
-    observerRef.current = observer;
-
-    return () => {
-      observer.disconnect();
-      observerRef.current = null;
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* ======================================================
-     SCROLL — VISIBILITÉ
-     ====================================================== */
-
   useEffect(() => {
-    const handleScroll = () => {
-      const currentY = window.scrollY;
-
-      setIsScrolled(currentY > 20);
-
-      if (currentY <= 10) {
-        setIsVisible(true);
-        previousScrollY.current = currentY;
-        return;
-      }
-
-      const difference =
-        currentY - previousScrollY.current;
-
-      if (difference > 8) {
-        setIsVisible(false);
-      }
-
-      if (difference < -8) {
-        setIsVisible(true);
-      }
-
-      previousScrollY.current = currentY;
-    };
-
-    window.addEventListener(
-      "scroll",
-      handleScroll,
-      { passive: true }
-    );
-
-    return () => {
-      window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
-    };
-  }, []);
-
-  /* ======================================================
-     INDICATEUR ACTIF
-     ====================================================== */
-
-  useEffect(() => {
-    const nav = navRef.current;
-    const indicator = indicatorRef.current;
-
-    if (!nav || !indicator) return;
-
-    const activeElement = nav.querySelector(
-      `[data-nav-id="${activeSection}"]`
-    );
-
-    if (!activeElement) return;
-
-    const navRect =
-      nav.getBoundingClientRect();
-
-    const itemRect =
-      activeElement.getBoundingClientRect();
-
-    const left =
-      itemRect.left -
-      navRect.left;
-
-    indicator.style.width =
-      `${itemRect.width}px`;
-
-    indicator.style.transform =
-      `translateX(${left}px)`;
-  }, [activeSection]);
-
-  /* ======================================================
-     NAVIGATION
-     ====================================================== */
-
-  const scrollToSection = (
-    event,
-    sectionId
-  ) => {
-    event.preventDefault();
-
-    const section =
-      document.getElementById(sectionId);
-
-    if (!section) return;
-
-    setActiveSection(sectionId);
-    setIsVisible(true);
     setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
-    section.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+  const openChatMobile = () => {
+    window.dispatchEvent(new Event("toggle-chat"));
+    setIsMobileMenuOpen(false);
   };
-
-  /* ======================================================
-     MAGNÉTISME
-     ====================================================== */
-
-  const handleMagneticMove = (event) => {
-    const element =
-      event.currentTarget;
-
-    const rect =
-      element.getBoundingClientRect();
-
-    const x =
-      (event.clientX -
-        rect.left -
-        rect.width / 2) *
-      0.12;
-
-    const y =
-      (event.clientY -
-        rect.top -
-        rect.height / 2) *
-      0.12;
-
-    element.style.transform =
-      `translate(${x}px, ${y}px)`;
-  };
-
-  const handleMagneticLeave = (event) => {
-    event.currentTarget.style.transform =
-      "translate(0, 0)";
-  };
-
-  /* ======================================================
-     RENDER DES LIENS
-     ====================================================== */
-
-  const renderLinks = (mobile = false) =>
-    links.map((link) => {
-      const isActive =
-        activeSection === link.id;
-
-      return (
-        <a
-          key={link.id}
-          href={`#${link.id}`}
-          data-nav-id={link.id}
-          onClick={(event) =>
-            scrollToSection(
-              event,
-              link.id
-            )
-          }
-          onMouseMove={
-            !mobile
-              ? handleMagneticMove
-              : undefined
-          }
-          onMouseLeave={
-            !mobile
-              ? handleMagneticLeave
-              : undefined
-          }
-          className={`
-            group
-            relative
-            flex
-            items-center
-            gap-2
-            rounded-full
-            transition-all
-            duration-300
-            ${
-              mobile
-                ? "w-full justify-between px-4 py-3"
-                : "px-3 py-2"
-            }
-            ${
-              isActive
-                ? "text-[var(--text-primary)]"
-                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-            }
-          `}
-        >
-          <span
-            className={`
-              transition-all
-              duration-300
-              ${
-                isActive
-                  ? "scale-110 text-[var(--accent)]"
-                  : "group-hover:scale-110"
-              }
-            `}
-          >
-            <Icon
-              type={link.icon}
-              size={mobile ? 18 : 16}
-            />
-          </span>
-
-          <span
-            className={`
-              font-semibold
-              ${
-                mobile
-                  ? "text-sm"
-                  : "text-[11px]"
-              }
-            `}
-          >
-            {link.label}
-          </span>
-
-          {mobile && (
-            <span
-              className={`
-                text-[var(--accent)]
-                transition-all
-                duration-300
-                ${
-                  isActive
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-2 opacity-0"
-                }
-              `}
-            >
-              →
-            </span>
-          )}
-        </a>
-      );
-    });
 
   return (
     <>
-      {/* ==================================================
-          DESKTOP NAVBAR
-          ================================================== */}
-
-      <nav
-        className={`
-          fixed
-          left-1/2
-          top-5
-          z-[100]
-          hidden
-          w-[calc(100%-40px)]
-          max-w-6xl
-          -translate-x-1/2
-          md:block
-          transition-all
-          duration-500
-          ${
-            isVisible
-              ? "translate-y-0 opacity-100"
-              : "-translate-y-20 opacity-0 pointer-events-none"
-          }
-        `}
-      >
-        <div
-          ref={navRef}
-          className={`
-            relative
-            flex
-            items-center
-            justify-between
-            rounded-full
-            border
-            border-[var(--border)]
-            px-3
-            py-2
-            backdrop-blur-xl
-            transition-all
-            duration-500
-            ${
-              isScrolled
-                ? "bg-[var(--bg-primary)]/80 shadow-[0_15px_50px_rgba(0,0,0,0.18)]"
-                : "bg-[var(--bg-primary)]/55"
-            }
-          `}
-        >
-          {/* Logo */}
-
-          <a
-            href="#home"
-            onClick={(event) =>
-              scrollToSection(
-                event,
-                "home"
-              )
-            }
-            className="
-              group
-              flex
-              shrink-0
-              items-center
-            "
-          >
-            <img
-              src="/images/logo.png"
-              alt="José Nahounmé"
-              className="
-                h-8
-                w-auto
-                object-contain
-                transition-transform
-                duration-300
-                group-hover:scale-105
-              "
-            />
-          </a>
-
-          {/* Liens */}
-
-          <div className="relative flex items-center">
-            {/* Indicateur */}
-
-            <div
-              ref={indicatorRef}
-              className="
-                pointer-events-none
-                absolute
-                bottom-0
-                left-0
-                h-px
-                rounded-full
-                bg-[var(--accent)]
-                shadow-[0_0_12px_rgba(30,136,229,0.7)]
-                transition-all
-                duration-500
-                ease-out
-              "
-            />
-
-            <div className="flex items-center gap-1">
-              {renderLinks(false)}
-            </div>
+      <nav className="fixed left-1/2 top-5 z-[100] hidden w-[calc(100%-40px)] max-w-5xl -translate-x-1/2 md:block transition-all duration-300">
+        <div className={`flex items-center justify-between rounded-full border border-[var(--border)] px-4 py-2.5 backdrop-blur-xl transition-all duration-300 ${isScrolled ? "bg-[var(--bg-primary)]/85 shadow-[0_15px_40px_rgba(0,0,0,0.25)]" : "bg-[var(--bg-primary)]/50"}`}>
+          <Link to="/" className="flex items-center gap-2 group">
+            <img src="/images/logo.png" alt="Logo" className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+          </Link>
+          <div className="flex items-center gap-1">
+            {NAV_LINKS.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link key={link.path} to={link.path} className={`relative flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold tracking-wide transition-all duration-300 ${isActive ? "bg-[var(--accent)] text-white shadow-md" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--text-primary)]/5"}`}>
+                  <span>{link.label}</span>
+                </Link>
+              );
+            })}
           </div>
-
-          {/* Thème */}
-
-          <button
-            type="button"
-            onClick={() =>
-              setDarkMode((value) => !value)
-            }
-            aria-label={
-              darkMode
-                ? "Activer le mode clair"
-                : "Activer le mode sombre"
-            }
-            onMouseMove={handleMagneticMove}
-            onMouseLeave={handleMagneticLeave}
-            className="
-              flex
-              h-9
-              w-9
-              shrink-0
-              items-center
-              justify-center
-              rounded-full
-              border
-              border-[var(--border)]
-              text-[var(--text-secondary)]
-              transition-all
-              duration-300
-              hover:border-[var(--accent)]
-              hover:text-[var(--accent)]
-            "
-          >
-            <span
-              className="
-                transition-transform
-                duration-500
-              "
-            >
-              <ThemeIcon
-                darkMode={darkMode}
-              />
-            </span>
+          <button onClick={() => setDarkMode(!darkMode)} className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--accent)]">
+            {darkMode ? (
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            ) : (
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            )}
           </button>
         </div>
       </nav>
 
-      {/* ==================================================
-          MOBILE NAVBAR
-          ================================================== */}
-
-      <div
-        className="
-          fixed
-          bottom-3
-          left-1/2
-          z-[100]
-          w-[calc(100%-20px)]
-          max-w-md
-          -translate-x-1/2
-          md:hidden
-        "
-      >
-        <div className="relative">
-          {/* Menu étendu */}
-
-          <div
-            className={`
-              absolute
-              bottom-[58px]
-              left-0
-              right-0
-              overflow-hidden
-              rounded-3xl
-              border
-              border-[var(--border)]
-              bg-[var(--bg-primary)]/90
-              p-2
-              backdrop-blur-xl
-              shadow-[0_20px_60px_rgba(0,0,0,0.28)]
-              transition-all
-              duration-400
-              ${
-                isMobileMenuOpen
-                  ? "visible translate-y-0 opacity-100"
-                  : "pointer-events-none invisible translate-y-3 opacity-0"
-              }
-            `}
-          >
-            <div className="flex flex-col">
-              {renderLinks(true)}
+      {/* MOBILE NAVBAR */}
+      <div className="fixed bottom-4 left-1/2 z-[100] w-[calc(100%-24px)] max-w-sm -translate-x-1/2 md:hidden">
+        {isMobileMenuOpen && (
+          <div className="mb-2 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--bg-primary)]/95 p-3 backdrop-blur-2xl shadow-2xl">
+            <div className="flex flex-col gap-1">
+              {NAV_LINKS.map((link) => {
+                const isActive = location.pathname === link.path;
+                return (
+                  <Link key={link.path} to={link.path} className={`flex items-center justify-between rounded-2xl px-4 py-3 text-xs font-bold transition-all ${isActive ? "bg-[var(--accent)] text-white" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}>
+                    <div className="flex items-center gap-3">{link.icon}<span>{link.label}</span></div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
+        )}
 
-          {/* Barre principale */}
+        <div className="flex items-center justify-between rounded-full border border-[var(--border)] bg-[var(--bg-primary)]/95 p-2 shadow-2xl backdrop-blur-2xl">
+          <Link to="/" className={`flex h-11 w-11 items-center justify-center rounded-full transition-all ${location.pathname === "/" ? "bg-[var(--accent)] text-white" : "text-[var(--text-secondary)]"}`}>
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+          </Link>
 
-          <div
-            className="
-              flex
-              items-center
-              justify-between
-              gap-1
-              rounded-full
-              border
-              border-[var(--border)]
-              bg-[var(--bg-primary)]/85
-              p-2
-              shadow-[0_15px_45px_rgba(0,0,0,0.25)]
-              backdrop-blur-xl
-            "
-          >
-            {/* Accueil */}
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--text-primary)]/5 px-4 py-2.5 text-xs font-bold text-[var(--text-primary)] transition-all">
+            <span>{isMobileMenuOpen ? "Fermer" : "Menu"}</span>
+          </button>
 
-            <a
-              href="#home"
-              onClick={(event) =>
-                scrollToSection(
-                  event,
-                  "home"
-                )
-              }
-              className={`
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
-                transition-all
-                duration-300
-                ${
-                  activeSection === "home"
-                    ? "bg-[var(--accent)] text-white"
-                    : "text-[var(--text-secondary)]"
-                }
-              `}
-              aria-label="Accueil"
-            >
-              <Icon
-                type="home"
-                size={17}
-              />
-            </a>
-
-            {/* Menu */}
-
-            <button
-              type="button"
-              aria-label={
-                isMobileMenuOpen
-                  ? "Fermer le menu"
-                  : "Ouvrir le menu"
-              }
-              onClick={() =>
-                setIsMobileMenuOpen(
-                  (value) => !value
-                )
-              }
-              className="
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
-                border
-                border-[var(--border)]
-                text-[var(--text-primary)]
-                transition-all
-                duration-300
-              "
-            >
-              <span className="relative h-4 w-5">
-                <span
-                  className={`
-                    absolute
-                    left-0
-                    top-0
-                    h-px
-                    w-5
-                    bg-current
-                    transition-all
-                    duration-300
-                    ${
-                      isMobileMenuOpen
-                        ? "top-1/2 rotate-45"
-                        : ""
-                    }
-                  `}
-                />
-
-                <span
-                  className={`
-                    absolute
-                    left-0
-                    top-1/2
-                    h-px
-                    w-5
-                    -translate-y-1/2
-                    bg-current
-                    transition-all
-                    duration-300
-                    ${
-                      isMobileMenuOpen
-                        ? "opacity-0"
-                        : ""
-                    }
-                  `}
-                />
-
-                <span
-                  className={`
-                    absolute
-                    left-0
-                    bottom-0
-                    h-px
-                    w-5
-                    bg-current
-                    transition-all
-                    duration-300
-                    ${
-                      isMobileMenuOpen
-                        ? "bottom-1/2 -rotate-45"
-                        : ""
-                    }
-                  `}
-                />
-              </span>
+          <div className="flex items-center gap-1">
+            <button onClick={openChatMobile} className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] relative">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+              <span className="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-green-500"></span>
             </button>
-
-            {/* Thème */}
-
-            <button
-              type="button"
-              onClick={() =>
-                setDarkMode(
-                  (value) => !value
-                )
-              }
-              aria-label={
-                darkMode
-                  ? "Activer le mode clair"
-                  : "Activer le mode sombre"
-              }
-              className="
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
-                text-[var(--text-secondary)]
-                transition-all
-                duration-300
-                hover:text-[var(--accent)]
-              "
-            >
-              <ThemeIcon
-                darkMode={darkMode}
-              />
+            <button onClick={() => setDarkMode(!darkMode)} className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+              {darkMode ? (
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+              ) : (
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+              )}
             </button>
           </div>
         </div>
@@ -813,5 +140,3 @@ function Navbar({ darkMode, setDarkMode }) {
     </>
   );
 }
-
-export default Navbar;

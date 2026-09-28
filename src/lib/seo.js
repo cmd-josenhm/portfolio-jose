@@ -1,0 +1,1 @@
+export const siteUrl='https://josenahounme.vercel.app';export const siteName='Jose Nahounme';export const defaultTitle='Jose Nahounme | Graphiste & Developpeur Web';export const defaultDescription='Portfolio de Jose Nahounme, graphiste designer et concepteur de sites web a Cotonou, Benin.';

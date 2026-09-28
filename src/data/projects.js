@@ -1,6 +1,54 @@
 const projects = [
   {
     id: 1,
+    name: "MUSIC VIVI",
+    cover: "/projects/music.png",
+
+    description:
+      "Une application web ultra-légère, rapide et 100% confidentielle permettant d'extraire et de convertir instantanément n'importe quelle vidéo en audio haute qualité directement dans votre navigateur sans passer par un serveur.",
+
+    category: "Application Web · Convertisseur Audio · Client-side",
+
+    images: [],
+
+    videos: [],
+
+    tools: [
+      "React",
+      "JavaScript",
+      "Tailwind CSS",
+      "Web Audio API",
+    ],
+
+    link: "https://music-vivi.netlify.app/",
+  },
+
+  {
+    id: 2,
+    name: "JOSEE",
+    cover: "/projects/josee.png",
+
+    description:
+      "Une alternative ultra-légère, gratuite et 100% personnalisable à Linktree, permettant à chacun de créer et gérer sa page de liens en bio en moins de 30 secondes.",
+
+    category: "Bio Link Creator · Identité Digitale · SaaS",
+
+    images: [],
+
+    videos: [],
+
+    tools: [
+      "React",
+      "Tailwind CSS",
+      "JavaScript",
+      "Local Storage",
+    ],
+
+    link: "https://joseee.netlify.app/",
+  },
+
+  {
+    id: 3,
     name: "COTONOUVERT",
     cover: "/projects/cotonouvert/cover.jpg",
 
@@ -24,7 +72,7 @@ const projects = [
   },
 
   {
-    id: 2,
+    id: 4,
     name: "MON PORTFOLIO",
     cover: "/projects/mon-portfolio/profile.jpeg",
 
@@ -50,7 +98,7 @@ const projects = [
   },
 
   {
-    id: 3,
+    id: 5,
     name: "KIDHOUSE",
     cover: "/projects/kidhouse/coverr.jpg",
 
@@ -71,7 +119,7 @@ const projects = [
   },
 
   {
-    id: 4,
+    id: 6,
     name: "LOGOS JN",
     cover: "/projects/jn-logos/img2.png",
 
@@ -81,55 +129,21 @@ const projects = [
     category: "Création de Logos",
 
     images: [
-    "/projects/jn-logos/img1.png", 
-    "/projects/jn-logos/img2.png",
-    "/projects/jn-logos/img3.png",
-    "/projects/jn-logos/img4.png",
-    "/projects/jn-logos/img5.png",
-    "/projects/jn-logos/img6.png",
-    "/projects/jn-logos/img7.png",
-    "/projects/jn-logos/img8.png",
-    "/projects/jn-logos/img9.png",
-    "/projects/jn-logos/img10.png"
-],
+      "/projects/jn-logos/img1.png", 
+      "/projects/jn-logos/img2.png",
+      "/projects/jn-logos/img3.png",
+      "/projects/jn-logos/img4.png",
+      "/projects/jn-logos/img5.png",
+      "/projects/jn-logos/img6.png",
+      "/projects/jn-logos/img7.png",
+      "/projects/jn-logos/img8.png",
+      "/projects/jn-logos/img9.png",
+      "/projects/jn-logos/img10.png",
+    ],
+
     videos: [],
+
     tools: ["Illustrator"],
-    link: "",
-  },
-
-  {
-    id: 5,
-    name: "SOXCAR",
-    cover: "/projects/soxcar/cover.jpg",
-
-    description:
-      "Présentation complète du projet Soxcar. Cette description sera remplacée par les informations définitives du projet.",
-
-    category: "Design & Web",
-
-    images: [],
-
-    videos: [],
-
-    tools: [],
-
-    link: "",
-  },
-  {
-    id: 6,
-    name: "APPLE TEAM",
-    cover: "/projects/soxcar/cover.jpg",
-
-    description:
-      "Présentation complète du projet Apple Team. Cette description sera remplacée par les informations définitives du projet.",
-
-    category: "Design & Web",
-
-    images: [],
-
-    videos: [],
-
-    tools: [],
 
     link: "",
   },
